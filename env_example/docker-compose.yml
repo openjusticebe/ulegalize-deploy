@@ -110,6 +110,28 @@ services:
       collect_logs_with_filebeat: "true"
       decode_log_event_to_json_object: "true"
 
+  ulegalize-drive:
+    image: finauxa/ulegalize-drive:3.2.1                                       # Allow access to log files and docker.sock
+    restart: always
+    ports:
+      - "127.0.0.1:9999:9999"
+    environment:
+      - "spring.profiles.active=test"
+      - "server.use-forward-headers=true"
+      - "app.cors.origin=https://yourdomain:7893,https://yourdomain:7890,https://yourdomain"
+      - "app.openstack.username=user-1234"
+      - "app.openstack.password=yourpwd"
+      - "app.openstack.region=RG"
+      - "app.openstack.tenantId=tenantId"
+      - "app.openstack.tenantName=tenantName"
+      - "app.dropbox.key=key"
+      - "app.dropbox.secret=secret"
+      - "app.onedrive.clientid=clientid"
+      - "app.onedrive.secret=secet"
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
+
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
