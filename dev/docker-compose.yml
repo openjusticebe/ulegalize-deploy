@@ -18,8 +18,9 @@ services:
       KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
       KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
       KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_MESSAGE_MAX_BYTES: 20000000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./:/etc/kafka
@@ -77,7 +78,7 @@ services:
       - logstash
 
   ulegalize-lawfirm:
-    image: finauxa/ulegalize-lawfirm:x.x.x                                       # Allow access to log files and docker.sock
+    image: finauxa/ulegalize-lawfirm:x.x.x                                       # Ask support to github issue 'question'
     network_mode: "host"
     restart: always
     ports:
@@ -97,43 +98,8 @@ services:
       collect_logs_with_filebeat: "true"
       decode_log_event_to_json_object: "true"
 
-  ulegalize-reports:
-    image: finauxa/ulegalize-reports:1.1.4                                       # Allow access to log files and docker.sock
-    network_mode: "host"
-    restart: always
-    ports:
-      - "127.0.0.1:5555:5555"
-    environment:
-      - "spring.profiles.active=test"
-      - "server.use-forward-headers=true"
-    labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
-
-  ulegalize-drive:
-    image: finauxa/ulegalize-drive:3.2.1                                       # Allow access to log files and docker.sock
-    restart: always
-    ports:
-      - "127.0.0.1:9999:9999"
-    environment:
-      - "spring.profiles.active=test"
-      - "server.use-forward-headers=true"
-      - "app.cors.origin=https://yourdomain:7893,https://yourdomain:7890,https://yourdomain"
-      - "app.openstack.username=user-1234"
-      - "app.openstack.password=yourpwd"
-      - "app.openstack.region=RG"
-      - "app.openstack.tenantId=tenantId"
-      - "app.openstack.tenantName=tenantName"
-      - "app.dropbox.key=key"
-      - "app.dropbox.secret=secret"
-      - "app.onedrive.clientid=clientid"
-      - "app.onedrive.secret=secet"
-    labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
-
-  db:
-    image: mysql
+  avogestdb:
+    image: mysql:5.6.51
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -142,5 +108,5 @@ services:
     ports:
       - "3306:3306"
     volumes:
-#     ask to the support to have a dump db
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql/avogest:/docker-entrypoint-initdb.d
+      - ./sql/avogest/dump.sql:/data/application/init.sql

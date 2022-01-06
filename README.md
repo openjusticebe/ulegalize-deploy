@@ -1,9 +1,31 @@
 # README #
 
-Kibana installation and all micro-services (spring-boot) 
+Kibana installation and all micro-services (spring-boot)
 
-There are multiple folders (dev, test... ) in order to split environment .
+There are multiple folders possible (dev, test... ) in order to split environment .
 You can see the differences between localhost and an environment "not dev"
+#Getting started
+install docker on your machine .
+clone the project
+
+### before running
+1. open `docker-compose.yml`
+2. change all **yourip** and **yourdomain** by your ip address or example.com into `docker-compose.yml`
+3. setup as well the `.env` for kibana usage
+4. setup kafka credential into `kafka_server_jaas.conf` file
+
+you can change the port for kafka or kibana
+### How do I get set up and run? ###
+### let's go
+```
+cd dev
+docker-compose up -d
+```
+
+check kibana after a few minutes (username and pwd are in .env) :  
+http://localhost:5601
+
+see below how to configure
 
 ### What is this repository for? ###
 
@@ -14,25 +36,6 @@ You can see the differences between localhost and an environment "not dev"
 
 ![image](img/services-and-elastic-stack.png)
 
-### before running
-1. open `docker-compose.yml`
-2. change all **yourip** and **yourdomain** by your ip address or example.com into `docker-compose.yml`
-3. setup as well the `.env` for kibana usage
-4. setup kafka credential into `kafka_server_jaas.conf` file
-  
-you can change the port for kafka or kibana 
-
-### How do I get set up and run? ###
-Get the environment you want (test)
-1. clone the repository
-2. cd env_example
-3. execute  
-`
-docker-compose up -d
-`  
-check kibana after a few minutes (username and pwd are in .env) :  
-  http://localhost:5601
-  
 4. create an index 
    ![image](img/index.png)
 5. Fill in "logstash-*" and click Next step
